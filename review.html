@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Reviews | Daroco</title>  
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary: #8B0000;
+            --secondary: #F8D7A3;
+            --dark: #222;
+            --light: #F9F5F0;
+            --white: #ffffff;
+            --gold: #D4AF37;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --text: #333;
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: auto;
+            padding: 0 20px;
+        }
+
+        .logo img {
+            height: 50px;
+        }
+
+        .home-btn {
+            color: var(--white);
+            background: rgba(255,255,255,0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+        }
+
+        .stars {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .star {
+            font-size: 30px;
+            color: var(--gold);
+            cursor: pointer;
+            margin: 0 5px;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: var(--dark);
+        }
+
+        .review-item {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .review-rating {
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .review-text {
+            margin-bottom: 10px;
+        }
+
+        .review-date {
+            font-size: 0.8em;
+            color: #777;
+        }
+
+        .message {
+            text-align: center;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+
+        .success {
+            color: var(--primary);
+        }
+
+        .error {
+            color: #d9534f;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="Image/logo.png" alt="Daroco Logo">
+            </div>
+            <a href="home.html" class="home-btn">
+                <i class="fas fa-home"></i> Home
+            </a>
+        </div>
+    </header>
+    <br><br><br>
+    
+    <div class="container">
+        <h2>Customer Reviews</h2>
+        
+        <div class="stars" id="starRating">
+            <span class="star" data-value="1">★</span>
+            <span class="star" data-value="2">★</span>
+            <span class="star" data-value="3">★</span>
+            <span class="star" data-value="4">★</span>
+            <span class="star" data-value="5">★</span>
+        </div>
+        
+        <textarea id="reviewText" placeholder="Share your experience with us..."></textarea>
+        <button class="btn" id="submitReview">Submit Review</button>
+        <div class="message" id="msg"></div>
+        
+        <div id="reviewsContainer">
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let selectedRating = 0;
+        
+            $('.star').on('click', function() {
+                selectedRating = $(this).data('value');
+                $('.star').text('★');
+                $(this).prevAll('.star').addBack().text('★');
+                $(this).nextAll('.star').text('☆');
+            });
+            
+            $('#submitReview').on('click', function() {
+                const reviewText = $('#reviewText').val().trim();
+                
+                if (selectedRating === 0) {
+                    $('#msg').text('Please select a rating').addClass('error').removeClass('success');
+                    return;
+                }
+                
+                if (reviewText === '') {
+                    $('#msg').text('Please write your review').addClass('error').removeClass('success');
+                    return;
+                }
+                
+                let reviews = JSON.parse(localStorage.getItem('darocoReviews')) || [];
+                
+                reviews.unshift({
+                    rating: selectedRating,
+                    text: reviewText,
+                    date: new Date().toLocaleDateString()
+                });
+                
+                localStorage.setItem('darocoReviews', JSON.stringify(reviews));
+                
+                $('#reviewText').val('');
+                $('.star').text('★');
+                selectedRating = 0;
+                
+                $('#msg').text('Thank you for your review!').addClass('success').removeClass('error');
+                
+                displayReviews();
+            });
+            
+            function displayReviews() {
+                const reviews = JSON.parse(localStorage.getItem('darocoReviews')) || [];
+                const $container = $('#reviewsContainer');
+                $container.empty();
+                
+                if (reviews.length === 0) {
+                    $container.html('<p>No reviews yet. Be the first to review!</p>');
+                    return;
+                }
+                
+                reviews.forEach(review => {
+                    const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+                    $container.append(`
+                        <div class="review-item">
+                            <div class="review-rating">${stars}</div>
+                            <div class="review-text">${review.text}</div>
+                            <div class="review-date">${review.date}</div>
+                        </div>
+                    `);
+                });
+            }
+            
+            displayReviews();
+        });
+    </script>
+</body>
+</html>
