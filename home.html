@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daroco | Authentic Italian Cuisine in Soho</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        :root {
+            --primary: #8B0000;
+            --secondary: #F8D7A3; 
+            --dark: #222;
+            --light: #F9F5F0;
+            --white: #FFFFFF;
+            --text: #333333;
+            --gold: #D4AF37;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: var(--transition);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .btn:hover {
+            background-color: var(--dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background-color: var(--gold);
+            margin: 15px auto 0;
+        }
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('image/bgimage.jpg') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+        }
+        #logo, #quote {
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        #logo {
+            height: 120px;
+            margin-bottom: 30px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        #quote {
+            max-width: 400px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 0;
+            background-color: rgba(139, 0, 0, 0.9);
+            color: var(--white);
+            z-index: 100;
+            transition: all 0.4s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        header.scrolled {
+            padding: 15px 0;
+            background-color: rgba(34, 34, 34, 0.95);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 60px;
+            transition: all 0.4s ease;
+        }
+
+        header.scrolled .logo img {
+            height: 50px;
+        }
+        nav ul {
+            display: flex;
+            gap: 25px;
+        }
+        nav a {
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 1px;
+            position: relative;
+            padding: 5px 0;
+        }
+        nav a:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+        nav a:hover:after {
+            width: 100%;
+        }
+        nav a:hover {
+            color: var(--secondary);
+        }
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        #home {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('image/hero-bg.jpg') center/cover no-repeat;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--white);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+        .hero-logo {
+            height: 120px;
+            margin: 0 auto 30px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        }
+
+        #menu {
+            padding: 100px 0;
+            background-color: var(--white);
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .menu-card {
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .menu-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .menu-card-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .menu-card-content h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        #chefs {
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+
+        .chef-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .chef-card {
+            max-width: 600px;
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .chef-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .chef-card img {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .chef-info {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .chef-info h2 {
+            margin-bottom: 15px;
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: var(--white);
+            padding: 80px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            color: var(--white);
+            margin-bottom: 25px;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--gold);
+        }
+
+        .footer-column p, .footer-column li {
+            margin-bottom: 15px;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .footer-column a:hover {
+            color: var(--secondary);
+        }
+
+        .contact-info i {
+            margin-right: 10px;
+            color: var(--gold);
+            width: 20px;
+            text-align: center;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 992px) {
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            nav {
+                position: fixed;
+                top: 90px;
+                left: 0;
+                width: 100%;
+                background-color: var(--dark);
+                padding: 20px;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+                transform: translateY(-150%);
+                opacity: 0;
+                transition: all 0.4s ease;
+            }
+
+            nav.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero-logo {
+                height: 80px;
+            }
+
+            .section-title {
+                margin-bottom: 30px;
+            }
+
+            #menu, #chefs {
+                padding: 60px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="splash-screen">
+        <img id="logo" src="Image/logo.png" alt="Daroco Logo">
+        <img id="quote" src="Image/quote1.png" alt="Italian Cuisine Quote">
+    </div>
+
+    <div id="main-content">
+        <header>
+            <div class="container header-container">
+                <div class="logo">
+                    <img src="Image/logo.png" alt="Daroco Logo">
+                </div>
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#reservation">Reservation</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#chefs">Our Chefs</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#review">Reviews</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <br>
+        <br>
+
+        <main>
+            <section id="home">
+                <div class="hero-content">
+                    <img src="Image/logo.png" alt="Daroco Logo" class="hero-logo">
+                    <h1>Authentic Italian Cuisine</h1>
+                    <p>Experience the true taste of Italy in the heart of Soho. Our master chefs craft traditional and contemporary dishes using the finest ingredients imported directly from Italy.</p>
+                    <section id="reservation">
+                        <a href="reservation.html" class="btn">Reserve a Table</a>
+                    </section>
+                </div>
+            </section>
+
+    
+            <section id="menu">
+                <div class="container">
+                    <h2 class="section-title">Our Menu</h2>
+                    <div class="menu-grid">
+                        <div class="menu-card">
+                            <a href="food menu.html">
+                                <img src="Image/food.jpg" alt="Food Menu">
+                                <div class="menu-card-content">
+                                    <h3>Food Menu</h3>
+                                    <p>Discover our authentic Italian dishes</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="menu-card">
+                            <a href="drinks menu.html">
+                                <img src="Image/drinks menu.jpg" alt="Drinks Menu">
+                                <div class="menu-card-content">
+                                    <h3>Drinks Menu</h3>
+                                    <p>Fine and crafted cocktails and mocktails</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="chefs">
+                <div class="container">
+                    <h2 class="section-title">Meet Our Chefs</h2>
+                    <div class="chef-container">
+                        <div class="chef-card">
+                            <a href="chef.html">
+                                <img src="Image/chef.jpg" alt="Our Chefs">
+                                <div class="chef-info">
+                                    <h2>Our Culinary Team</h2>
+                                    <p>Passionate chefs bringing authentic Italian flavors to your table</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+ 
+        <footer>
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-column">
+                        <h3>Contact Us</h3>
+                        <section id="contact">
+                            <div class="contact-info">
+                                <p><i class="fas fa-map-marker-alt"></i> W1D 4AL, Soho, London</p>
+                                <p><i class="fas fa-envelope"></i> <a href="mailto:info@darocosoho.com">info@darocosoho.com</a></p>
+                                <p><i class="fas fa-phone"></i> <a href="tel:+44020798786879">+44 020 7987 86879</a></p>
+                            </div>
+                        </section>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-tripadvisor"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Opening Hours</h3>
+                        <ul>
+                            <li><strong>Monday - Friday:</strong> 11:00 am - 10:00 pm</li>
+                            <li><strong>Saturday - Sunday:</strong> 11:00 am - 12:00 pm</li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="reservation.html">Reservation</a></li>
+                            <li><a href="#menu">Our Menu</a></li>
+                            <li><a href="chef.html">Our Chefs</a></li>
+                            <li><a href="review.html">Customer Reviews</a></li>
+                            <li><a href="aboutus.html">About Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="about us ">
+                    <section id="about">
+                        <a href ="aboutus.html">About us</a>
+                    </section>
+                </div>
+                <div class="review-part">
+                    <section id="review">
+                        <a href ="review.html"> Review</a>
+                    </section>
+                </div>
+
+                <div class="copyright">
+                    &copy; 2025 Daroco Italian Restaurant. All Rights Reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $('#logo').css('opacity', 1);
+                $('#quote').css('opacity', 1);
+            }, 500);
+            setTimeout(function() {
+                $('#splash-screen').fadeOut(800, function() {
+                    $('#main-content').fadeIn(1000);
+                });
+            }, 2500);
+            $(window).scroll(function() {
+                if ($(this).scrollTop() > 100) {
+                    $('header').addClass('scrolled');
+                } else {
+                    $('header').removeClass('scrolled');
+                }
+            });
+            $('.menu-toggle').click(function() {
+                $('nav').toggleClass('active');
+                $(this).find('i').toggleClass('fa-times fa-bars');
+            });
+            $('a[href*="#"]').on('click', function(e) {
+                e.preventDefault();
+                
+                if ($(this).attr('href') === '#') return;
+                
+                $('nav').removeClass('active');
+                $('.menu-toggle i').removeClass('fa-times').addClass('fa-bars');
+                
+                $('html, body').animate(
+                    {
+                        scrollTop: $($(this).attr('href')).offset().top - 80
+                    },
+                    800
+                );
+            });
+        });
+    </script>
+</body>
+</html>
